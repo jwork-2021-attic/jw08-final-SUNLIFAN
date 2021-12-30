@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlayerControl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">roguelike-game</a> &gt; <a href="index.source.html" class="el_package">cn.edu.nju.entity</a> &gt; <span class="el_source">PlayerControl.java</span></div><h1>PlayerControl.java</h1><pre class="source lang-java linenums">package cn.edu.nju.entity;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import cn.edu.nju.GameLogic.GameControl;
+import cn.edu.nju.gui.Window;
+import cn.edu.nju.utils.Direction;
+
+public class PlayerControl implements Runnable, KeyListener{
+    
+    private Player player;
+    public volatile boolean active;
+
+<span class="fc" id="L14">    public PlayerControl(Player player){</span>
+<span class="fc" id="L15">        this.player = player;</span>
+<span class="fc" id="L16">        Window.screen.addKeyListener(this);</span>
+<span class="fc" id="L17">        active = true;</span>
+<span class="fc" id="L18">    }</span>
+
+    @Override
+    public void run() {
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">        while(active){</span>
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">            if(!GameControl.gameState)break;</span>
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">            if(GameControl.suspend)continue;</span>
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">            if(!player.isAlive()){</span>
+<span class="nc" id="L26">                System.out.println(&quot;[Player Control:]player died&quot;);</span>
+<span class="nc" id="L27">                active = false;</span>
+<span class="nc" id="L28">                GameControl.gameState = false;</span>
+<span class="nc" id="L29">                GameControl.playerWin = false;</span>
+<span class="nc" id="L30">                break;</span>
+            }
+        }
+<span class="nc" id="L33">    }</span>
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if(GameControl.suspend)return;</span>
+        
+<span class="nc bnc" id="L39" title="All 6 branches missed.">        switch(e.getKeyCode()){</span>
+            case KeyEvent.VK_W:
+<span class="nc" id="L41">                player.setDirection(Direction.UP);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">                if(GameControl.getMap().getNeighborTile(player.getXPos(), player.getYPos(), player.dir).getName().equals(&quot;stairs&quot;)){</span>
+<span class="nc" id="L43">                    GameControl.gameState = false;</span>
+<span class="nc" id="L44">                    GameControl.playerWin = true;</span>
+<span class="nc" id="L45">                    active = false;</span>
+<span class="nc" id="L46">                    break;</span>
+                }
+<span class="nc" id="L48">                player.move();</span>
+<span class="nc" id="L49">                break;</span>
+            case KeyEvent.VK_S:    
+<span class="nc" id="L51">                player.setDirection(Direction.DOWN);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">                if(GameControl.getMap().getNeighborTile(player.getXPos(), player.getYPos(), player.dir).getName().equals(&quot;stairs&quot;)){</span>
+<span class="nc" id="L53">                    GameControl.gameState = false;</span>
+<span class="nc" id="L54">                    GameControl.playerWin = true;</span>
+<span class="nc" id="L55">                    active = false;</span>
+<span class="nc" id="L56">                    break;</span>
+                }
+<span class="nc" id="L58">                player.move();</span>
+<span class="nc" id="L59">                break;</span>
+            case KeyEvent.VK_A: 
+<span class="nc" id="L61">                player.setDirection(Direction.LEFT);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                if(GameControl.getMap().getNeighborTile(player.getXPos(), player.getYPos(), player.dir).getName().equals(&quot;stairs&quot;)){</span>
+<span class="nc" id="L63">                    GameControl.gameState = false;</span>
+<span class="nc" id="L64">                    GameControl.playerWin = true;</span>
+<span class="nc" id="L65">                    active = false;</span>
+<span class="nc" id="L66">                    break;</span>
+                }
+<span class="nc" id="L68">                player.move();</span>
+<span class="nc" id="L69">                break;</span>
+            case KeyEvent.VK_D:
+<span class="nc" id="L71">                player.setDirection(Direction.RIGHT);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                if(GameControl.getMap().getNeighborTile(player.getXPos(), player.getYPos(), player.dir).getName().equals(&quot;stairs&quot;)){</span>
+<span class="nc" id="L73">                    GameControl.gameState = false;</span>
+<span class="nc" id="L74">                    GameControl.playerWin = true;</span>
+<span class="nc" id="L75">                    active = false;</span>
+<span class="nc" id="L76">                    break;</span>
+                }
+<span class="nc" id="L78">                player.move();</span>
+<span class="nc" id="L79">                break;</span>
+            case KeyEvent.VK_SPACE:
+<span class="nc" id="L81">                player.fire(player.dir);</span>
+                break;    
+        }
+        
+<span class="nc" id="L85">    }</span>
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if(GameControl.suspend)return;</span>
+        
+<span class="nc bnc" id="L91" title="All 6 branches missed.">        switch(e.getKeyCode()){</span>
+            case KeyEvent.VK_W:
+<span class="nc" id="L93">                player.setDirection(Direction.UP);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">                if(GameControl.getMap().getNeighborTile(player.getXPos(), player.getYPos(), player.dir).getName().equals(&quot;stairs&quot;)){</span>
+<span class="nc" id="L95">                    GameControl.gameState = false;</span>
+<span class="nc" id="L96">                    GameControl.playerWin = true;</span>
+<span class="nc" id="L97">                    active = false;</span>
+<span class="nc" id="L98">                    break;</span>
+                }
+<span class="nc" id="L100">                player.move();</span>
+<span class="nc" id="L101">                break;</span>
+            case KeyEvent.VK_S:    
+<span class="nc" id="L103">                player.setDirection(Direction.DOWN);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                if(GameControl.getMap().getNeighborTile(player.getXPos(), player.getYPos(), player.dir).getName().equals(&quot;stairs&quot;)){</span>
+<span class="nc" id="L105">                    GameControl.gameState = false;</span>
+<span class="nc" id="L106">                    GameControl.playerWin = true;</span>
+<span class="nc" id="L107">                    active = false;</span>
+<span class="nc" id="L108">                    break;</span>
+                }
+<span class="nc" id="L110">                player.move();</span>
+<span class="nc" id="L111">                break;</span>
+            case KeyEvent.VK_A: 
+<span class="nc" id="L113">                player.setDirection(Direction.LEFT);</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                if(GameControl.getMap().getNeighborTile(player.getXPos(), player.getYPos(), player.dir).getName().equals(&quot;stairs&quot;)){</span>
+<span class="nc" id="L115">                    GameControl.gameState = false;</span>
+<span class="nc" id="L116">                    GameControl.playerWin = true;</span>
+<span class="nc" id="L117">                    active = false;</span>
+<span class="nc" id="L118">                    break;</span>
+                }
+<span class="nc" id="L120">                player.move();</span>
+<span class="nc" id="L121">                break;</span>
+            case KeyEvent.VK_D:
+<span class="nc" id="L123">                player.setDirection(Direction.RIGHT);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                if(GameControl.getMap().getNeighborTile(player.getXPos(), player.getYPos(), player.dir).getName().equals(&quot;stairs&quot;)){</span>
+<span class="nc" id="L125">                    GameControl.gameState = false;</span>
+<span class="nc" id="L126">                    GameControl.playerWin = true;</span>
+<span class="nc" id="L127">                    active = false;</span>
+<span class="nc" id="L128">                    break;</span>
+                }
+<span class="nc" id="L130">                player.move();</span>
+<span class="nc" id="L131">                break;</span>
+            case KeyEvent.VK_SPACE:
+<span class="nc" id="L133">                player.fire(player.dir);</span>
+                break;    
+        }
+        //System.out.format(&quot;player's current position : x = %d, y = %d %n&quot;, player.getXPos(),player.getYPos());
+<span class="nc" id="L137">    }</span>
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        
+<span class="nc" id="L142">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">roguelike-game</a> &gt; <a href="index.source.html" class="el_package">cn.edu.nju.gui</a> &gt; <span class="el_source">GameScreen.java</span></div><h1>GameScreen.java</h1><pre class="source lang-java linenums">package cn.edu.nju.gui;
+
+import javax.swing.JPanel;
+
+import cn.edu.nju.GameLogic.GameControl;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
+
+public class GameScreen extends JPanel{
+    
+    private Renderer renderer;
+    
+    public GameScreen(){
+<span class="fc" id="L16">        super();</span>
+		
+<span class="fc" id="L18">		this.renderer = new Renderer();</span>
+<span class="fc" id="L19">    }</span>
+
+    @Override
+    protected void paintComponent(Graphics graphics){
+<span class="fc" id="L23">        super.paintComponent(graphics);</span>
+
+        try {
+<span class="fc" id="L26">			graphics.setColor(Color.BLACK);</span>
+<span class="fc" id="L27">			graphics.fillRect(0, 0, Window.WIDTH, Window.HEIGHT);</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">			if(GameControl.isOnTileScreen){</span>
+<span class="fc" id="L29">				renderer.renderTitleScreen(graphics);</span>
+<span class="fc" id="L30">			}</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">			else if(!GameControl.gameState){</span>
+<span class="nc" id="L32">				renderer.renderEndScreen(graphics);</span>
+<span class="nc" id="L33">			}</span>
+			else{
+<span class="nc" id="L35">				renderer.renderMap(GameControl.getMap(), GameControl.getPlayer(),graphics);</span>
+<span class="nc" id="L36">				renderer.renderUI((Graphics2D)graphics, GameControl.getPlayer());</span>
+<span class="nc" id="L37">				renderer.renderPlayer(GameControl.getPlayer(), graphics);</span>
+<span class="nc" id="L38">				renderer.renderMonsters(GameControl.getMonsters(),GameControl.getPlayer(), graphics);</span>
+<span class="nc" id="L39">				renderer.renderBullets(GameControl.getBullets(), GameControl.getPlayer(), graphics);</span>
+			}
+<span class="pc" id="L41">		} catch (Exception e) {</span>
+<span class="fc" id="L42">			System.err.println(&quot;\n[Logic][GameLoop]: Uncaught exception in render system!\n&quot;);</span>
+<span class="fc" id="L43">			e.printStackTrace();</span>
+<span class="nc" id="L44">			System.exit(-1);</span>
+		}
+		
+<span class="fc" id="L47">		repaint();</span>
+<span class="fc" id="L48">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Textures.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">roguelike-game</a> &gt; <a href="index.source.html" class="el_package">cn.edu.nju.resources</a> &gt; <span class="el_source">Textures.java</span></div><h1>Textures.java</h1><pre class="source lang-java linenums">package cn.edu.nju.resources;
+
+import java.awt.image.BufferedImage;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import java.util.HashMap;
+
+import javax.imageio.ImageIO;
+
+<span class="nc" id="L13">public class Textures {</span>
+
+	private static HashMap&lt;String, BufferedImage&gt; sprites;
+	
+	/**Initializes texture HashMap and reads all files in res folder&lt;br&gt;
+	 * Call in GameLogic#initializeGame*/
+	public static void init() {
+<span class="fc" id="L20">		sprites = new HashMap&lt;String, BufferedImage&gt;();</span>
+		
+<span class="fc" id="L22">		File folder = new File(&quot;assets/textures&quot;);</span>
+		
+<span class="fc bfc" id="L24" title="All 2 branches covered.">		for(File file : folder.listFiles()) {</span>
+			try {
+<span class="fc" id="L26">				sprites.put(file.getName().replaceAll(&quot;.png&quot;, &quot;&quot;), ImageIO.read(file));</span>
+<span class="pc" id="L27">			} catch (IOException e) {</span>
+<span class="nc" id="L28">				System.err.println(&quot;[Utils][Textures]: Exception reading &quot;+file.getName());</span>
+			}
+		}
+		
+<span class="fc" id="L32">		System.out.println(&quot;[Utils][Textures]: Finished reading sprite files&quot;);</span>
+<span class="fc" id="L33">	}</span>
+	
+	/**Gets a sprite from the sprite HashMap
+	 * @param name - Corresponding name in HashMap
+	 * @return - A BufferedImage representing the requested sprite
+	 * @throws FileNotFoundException
+	 */
+	public static BufferedImage getSprite(String name) throws FileNotFoundException {
+<span class="fc" id="L41">		BufferedImage sprite = sprites.get(name);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">		if(sprite == null)throw new FileNotFoundException();</span>
+<span class="fc" id="L43">		return sprite;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

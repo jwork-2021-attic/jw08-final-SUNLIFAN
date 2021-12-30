@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Window.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">roguelike-game</a> &gt; <a href="index.source.html" class="el_package">cn.edu.nju.gui</a> &gt; <span class="el_source">Window.java</span></div><h1>Window.java</h1><pre class="source lang-java linenums">package cn.edu.nju.gui;
+
+import javax.swing.JFrame;
+
+<span class="nc" id="L5">public class Window {</span>
+
+	public static final int WIDTH = 900;
+	public static final int HEIGHT = 600;
+	
+	private static JFrame window;
+	public static GameScreen screen;
+	
+	/**Initializes a JFrame object&lt;br&gt;
+	 * Called at beginning of main*/
+	public static void create() {
+<span class="fc" id="L16">		window = new JFrame(&quot;Roguelike Game&quot;);</span>
+<span class="fc" id="L17">		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="fc" id="L18">		window.setBounds(20, 20, WIDTH, HEIGHT);</span>
+<span class="fc" id="L19">		window.setResizable(false);</span>
+		
+<span class="fc" id="L21">		screen = new GameScreen();</span>
+<span class="fc" id="L22">		window.add(screen);</span>
+		
+<span class="fc" id="L24">		System.out.println(&quot;[Gui][Window]: Created window&quot;);</span>
+<span class="fc" id="L25">	}</span>
+	
+	/**Calls JFrame#setVisible&lt;br&gt;
+	 * Called when initialization is done*/
+	public static void setVisible() {
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">		if(window!=null) window.setVisible(true);</span>
+<span class="fc" id="L31">		System.out.println(&quot;[Gui][Window]: Window set to visible&quot;);</span>
+<span class="fc" id="L32">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MonsterAI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">roguelike-game</a> &gt; <a href="index.source.html" class="el_package">cn.edu.nju.entity</a> &gt; <span class="el_source">MonsterAI.java</span></div><h1>MonsterAI.java</h1><pre class="source lang-java linenums">package cn.edu.nju.entity;
+
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import cn.edu.nju.GameLogic.GameControl;
+import cn.edu.nju.utils.Direction;
+
+public class MonsterAI implements Runnable{
+    private Monster monster;
+    private Random rand;
+    private boolean active;
+
+
+
+<span class="fc" id="L16">    public MonsterAI(Monster monster){</span>
+<span class="fc" id="L17">        this.monster = monster;</span>
+<span class="fc" id="L18">        rand = new Random();</span>
+<span class="fc" id="L19">        this.active = true;</span>
+<span class="fc" id="L20">    }</span>
+
+
+    @Override
+    public void run() {
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">        while(this.active){</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">            if(!GameControl.gameState)break;</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">            if(GameControl.suspend)continue;</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">            if(!monster.isAlive())break;</span>
+<span class="fc" id="L29">            int dir = rand.nextInt(4);</span>
+<span class="pc bpc" id="L30" title="1 of 5 branches missed.">            switch(dir){</span>
+                case 0:
+<span class="fc" id="L32">                    monster.setDirection(Direction.LEFT);</span>
+<span class="fc" id="L33">                    break;</span>
+                case 1:
+<span class="fc" id="L35">                    monster.setDirection(Direction.RIGHT);</span>
+<span class="fc" id="L36">                    break;</span>
+                case 2:
+<span class="fc" id="L38">                    monster.setDirection(Direction.UP);</span>
+<span class="fc" id="L39">                    break;</span>
+                case 3:
+<span class="fc" id="L41">                    monster.setDirection(Direction.DOWN);</span>
+                    break;
+            }
+<span class="fc" id="L44">            monster.move();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            if(rand.nextInt(2) == 1)monster.fire(monster.dir);</span>
+            try {
+<span class="nc" id="L47">                TimeUnit.MILLISECONDS.sleep(1000);</span>
+<span class="nc" id="L48">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L49">                System.out.println(&quot;[MonsterAI]:Exceptions in MonsterAI!!!&quot;);</span>
+            }
+        }
+<span class="nc" id="L52">        }</span>
+    }
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

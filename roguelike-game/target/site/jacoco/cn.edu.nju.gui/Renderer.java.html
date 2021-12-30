@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Renderer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">roguelike-game</a> &gt; <a href="index.source.html" class="el_package">cn.edu.nju.gui</a> &gt; <span class="el_source">Renderer.java</span></div><h1>Renderer.java</h1><pre class="source lang-java linenums">package cn.edu.nju.gui;
+
+import cn.edu.nju.GameLogic.GameControl;
+import cn.edu.nju.entity.Bullet;
+import cn.edu.nju.entity.Monster;
+import cn.edu.nju.entity.Player;
+import cn.edu.nju.resources.Textures;
+import cn.edu.nju.scene.Map;
+import cn.edu.nju.scene.Tile;
+import cn.edu.nju.utils.Direction;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.util.Collection;
+import java.util.Vector;
+import java.awt.Font;
+import java.awt.Color;
+
+public class Renderer {
+    private int zoomLevel;
+
+<span class="fc" id="L24">    public Renderer(){</span>
+<span class="fc" id="L25">        this.zoomLevel = 2;</span>
+<span class="fc" id="L26">    }</span>
+
+    /**
+     * render player image at correct place
+     * @param player
+     * @param graphics
+     */
+    public void renderPlayer(Player player, Graphics graphics){
+
+<span class="nc" id="L35">        BufferedImage sprite = null;</span>
+        try {
+<span class="nc" id="L37">            sprite = Textures.getSprite(&quot;player&quot;);</span>
+<span class="nc" id="L38">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L39">            System.out.println(&quot;picture not found!&quot;);</span>
+<span class="nc" id="L40">            e.printStackTrace();</span>
+        }
+
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if(player.dir == Direction.RIGHT)</span>
+            try {
+<span class="nc" id="L45">                sprite = mirrorImage(Textures.getSprite(&quot;player&quot;));</span>
+<span class="nc" id="L46">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L47">                e.printStackTrace();</span>
+            }
+
+<span class="nc" id="L50">        int drawPosX = (Window.WIDTH/2)-(sprite.getWidth()/2)*zoomLevel;</span>
+<span class="nc" id="L51">		int drawPosY = (Window.HEIGHT/2)-(sprite.getHeight()/2)*zoomLevel;</span>
+
+<span class="nc" id="L53">        graphics.drawImage(sprite, drawPosX, drawPosY, sprite.getWidth()*zoomLevel,</span>
+<span class="nc" id="L54">        sprite.getHeight()*zoomLevel,null);</span>
+
+<span class="nc" id="L56">    }</span>
+
+    /**
+     * render tiles at correct position
+     * @param mapData
+     * @param graphics
+     */
+    public void renderMap(Map mapData, Player player,Graphics graphics){
+<span class="fc" id="L64">        int width = mapData.getWidth();</span>
+<span class="fc" id="L65">        int height = mapData.getHeight();</span>
+
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        for(int i = 0; i &lt; height;i++)</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            for(int j = 0; j &lt; width;j ++){</span>
+<span class="fc" id="L69">                Tile tile = mapData.getTile(i, j);</span>
+<span class="fc" id="L70">                BufferedImage sprite = null;</span>
+                try {
+<span class="fc" id="L72">                    sprite = Textures.getSprite(tile.getName());</span>
+<span class="fc" id="L73">                } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L74">                    e.printStackTrace();</span>
+                }
+<span class="fc" id="L76">                int drawPosX = calculateWidthOffset(sprite, tile, player);</span>
+<span class="fc" id="L77">                int drawPosY = calculateHeightOffset(sprite, tile, player);</span>
+<span class="fc" id="L78">                graphics.drawImage(sprite, drawPosX, drawPosY, </span>
+<span class="fc" id="L79">                sprite.getWidth()*zoomLevel,sprite.getHeight()*zoomLevel, null);</span>
+            }
+<span class="nc" id="L81">    }</span>
+
+    /**
+     * render current alive monsters
+     * @param monsters
+     * @param graphics
+     */
+    public void renderMonsters(Collection&lt;Monster&gt; monsters, Player player, Graphics graphics){
+<span class="nc bnc" id="L89" title="All 4 branches missed.">        if(monsters == null || monsters.isEmpty())return;</span>
+
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        for(Monster m : monsters){</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if(!m.isAlive())continue;</span>
+<span class="nc" id="L93">            BufferedImage sprite = null;</span>
+            try {
+<span class="nc" id="L95">                sprite = Textures.getSprite(m.getName());</span>
+<span class="nc" id="L96">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L97">                e.printStackTrace();</span>
+            }
+<span class="nc" id="L99">            int xPos = calculateWidthOffset(sprite, m, player);</span>
+<span class="nc" id="L100">            int yPos = calculateHeightOffset(sprite, m, player);</span>
+<span class="nc" id="L101">            graphics.drawImage(sprite, xPos, yPos, sprite.getWidth()*zoomLevel,</span>
+<span class="nc" id="L102">            sprite.getHeight()*zoomLevel, null);</span>
+        }
+<span class="nc" id="L104">    }</span>
+
+    /**
+     * render bullets at correct places
+     * @param bullets
+     * @param player
+     * @param graphics
+     */
+    public void renderBullets(Vector&lt;Bullet&gt; bullets, Player player, Graphics graphics){
+<span class="nc bnc" id="L113" title="All 4 branches missed.">        if(bullets == null || bullets.isEmpty())return;</span>
+        
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        for(int i = 0 ; i &lt; bullets.size();i++){</span>
+<span class="nc" id="L116">                Bullet b = bullets.get(i);</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                if(!b.isActive()){</span>
+<span class="nc" id="L118">                    bullets.remove(b);</span>
+<span class="nc" id="L119">                    continue;</span>
+                }
+<span class="nc" id="L121">            BufferedImage sprite = null;</span>
+            try {
+<span class="nc" id="L123">                sprite = Textures.getSprite(&quot;bullet&quot;);</span>
+<span class="nc" id="L124">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L125">                e.printStackTrace();</span>
+            }
+<span class="nc" id="L127">            int drawPosX = calculateWidthOffset(sprite, b, player);</span>
+<span class="nc" id="L128">            int drawPosY = calculateHeightOffset(sprite, b, player);</span>
+<span class="nc" id="L129">            graphics.drawImage(sprite, drawPosX, drawPosY, </span>
+<span class="nc" id="L130">            sprite.getWidth(), sprite.getHeight(), null);</span>
+        }
+<span class="nc" id="L132">    }</span>
+
+    /**
+     * render start screen
+     * @param graphics
+     */
+    public void renderTitleScreen(Graphics graphics) {
+<span class="fc" id="L139">		graphics.setColor(Color.WHITE);</span>
+<span class="fc" id="L140">		graphics.drawRoundRect(50, 50, Window.WIDTH-150, Window.HEIGHT-150, 10, 10);</span>
+<span class="fc" id="L141">		graphics.setFont(new Font(&quot;Dialog&quot;, Font.PLAIN, 40));</span>
+<span class="fc" id="L142">		graphics.drawString(&quot;Roguelike Game&quot;, 100, 100);</span>
+<span class="fc" id="L143">		graphics.setFont(new Font(&quot;Dialog&quot;, Font.PLAIN, 20));</span>
+<span class="fc" id="L144">		graphics.drawString(&quot;Greetings chosen,&quot;, 100, 150);</span>
+<span class="fc" id="L145">		graphics.drawString(&quot;I've been waiting here for you since the beginning of this universe...&quot;, 100, 180);</span>
+<span class="fc" id="L146">		graphics.drawString(&quot;You know the world is fading...&quot;, 100, 210);</span>
+<span class="fc" id="L147">		graphics.drawString(&quot;Can you escape here?&quot;, 100, 240);</span>
+<span class="fc" id="L148">		graphics.drawString(&quot;Press enter to start.....&quot;, 200, 350);</span>
+<span class="fc" id="L149">	}</span>
+
+
+    /**
+     * render the end screen when game ends
+     * @param graphics
+     */
+    public void renderEndScreen(Graphics graphics){
+<span class="nc" id="L157">        graphics.setColor(Color.WHITE);</span>
+<span class="nc" id="L158">		graphics.drawRoundRect(50, 50, Window.WIDTH-150, Window.HEIGHT-150, 10, 10);</span>
+<span class="nc" id="L159">		graphics.setFont(new Font(&quot;Dialog&quot;, Font.PLAIN, 40));</span>
+<span class="nc" id="L160">		graphics.drawString(&quot;Roguelike Game&quot;, 100, 100);</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        if(GameControl.playerWin){</span>
+<span class="nc" id="L162">            graphics.drawString(&quot;Marvelous! You have escaped....&quot;, 100, 150);</span>
+<span class="nc" id="L163">        }else{</span>
+<span class="nc" id="L164">            graphics.drawString(&quot;You died. What a pity ....&quot;, 100, 150);</span>
+        }
+<span class="nc" id="L166">    }</span>
+
+
+    /**
+     * render user interface
+     * @param graphics
+     * @param player
+     */
+    public void renderUI(Graphics2D graphics, Player player){
+<span class="nc" id="L175">        graphics.setColor(Color.BLACK);</span>
+<span class="nc" id="L176">		graphics.fillRoundRect(5, 5, 100, 150, 10, 10);</span>
+<span class="nc" id="L177">		graphics.setColor(Color.WHITE);</span>
+<span class="nc" id="L178">		graphics.drawRoundRect(5, 5, 100, 150, 10, 10);</span>
+
+
+<span class="nc" id="L181">        graphics.setFont(new Font(&quot;Dialog&quot;, Font.PLAIN, 20));</span>
+<span class="nc" id="L182">		graphics.drawString(&quot;- Player -&quot;, 10, 25);</span>
+<span class="nc" id="L183">		graphics.setFont(new Font(&quot;Dialog&quot;, Font.PLAIN, 12));</span>
+<span class="nc" id="L184">		graphics.drawString(&quot;HP: &quot;+player.getHealth()+&quot;/&quot;+player.getMaxHealth(), 10, 45);</span>
+<span class="nc" id="L185">		graphics.drawString(&quot;STR: &quot;+player.getStrength(), 10, 65);</span>
+<span class="nc" id="L186">    }</span>
+
+    
+    /**
+     * mirror the image based on its facing
+     * @param image
+     * @return
+     */
+    private BufferedImage mirrorImage(BufferedImage image) {
+<span class="nc" id="L195">		int h = image.getHeight();</span>
+<span class="nc" id="L196">		int w = image.getWidth();</span>
+<span class="nc" id="L197">		BufferedImage rotated = new BufferedImage(h, w, image.getType());</span>
+		
+<span class="nc bnc" id="L199" title="All 2 branches missed.">		for(int x=0;x&lt;w;x++) {</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">			for(int y=0;y&lt;h;y++) {</span>
+<span class="nc" id="L201">				rotated.setRGB(x, y, image.getRGB(w-1-x, y));</span>
+			}
+		}
+<span class="nc" id="L204">		return rotated;</span>
+	}
+
+
+    private int calculateWidthOffset(BufferedImage sprite, Tile tile, Player player){
+<span class="fc" id="L209">        int offsetOnScreen = (tile.getYPos() - player.getYPos())*sprite.getWidth()*zoomLevel + (Window.WIDTH/2)-(sprite.getWidth()/2)*zoomLevel;;</span>
+
+<span class="fc" id="L211">        return offsetOnScreen;</span>
+    }
+
+    private int calculateHeightOffset(BufferedImage sprite, Bullet bullet, Player player){
+<span class="nc" id="L215">        int offsetOnScreen = (bullet.getXPos() - player.getXPos())*sprite.getHeight()*zoomLevel + (Window.HEIGHT/2)-(sprite.getHeight()/2)*zoomLevel;</span>
+
+<span class="nc" id="L217">        return offsetOnScreen;</span>
+    }
+
+    private int calculateWidthOffset(BufferedImage sprite, Bullet bullet, Player player){
+<span class="nc" id="L221">        int offsetOnScreen = (bullet.getYPos() - player.getYPos())*sprite.getWidth()*zoomLevel + (Window.WIDTH/2)-(sprite.getWidth()/2)*zoomLevel;;</span>
+
+<span class="nc" id="L223">        return offsetOnScreen;</span>
+    }
+
+    private int calculateHeightOffset(BufferedImage sprite, Tile tile, Player player){
+<span class="fc" id="L227">        int offsetOnScreen = (tile.getXPos() - player.getXPos())*sprite.getHeight()*zoomLevel + (Window.HEIGHT/2)-(sprite.getHeight()/2)*zoomLevel;</span>
+
+<span class="fc" id="L229">        return offsetOnScreen;</span>
+    }
+
+    private int calculateWidthOffset(BufferedImage sprite, Monster monster, Player player){
+<span class="nc" id="L233">        int offsetOnScreen = (monster.getYPos() - player.getYPos())*sprite.getWidth()*zoomLevel + (Window.WIDTH/2)-(sprite.getWidth()/2)*zoomLevel;</span>
+
+<span class="nc" id="L235">        return offsetOnScreen;</span>
+    }
+
+    private int calculateHeightOffset(BufferedImage sprite, Monster monster, Player player){
+<span class="nc" id="L239">        int offsetOnScreen = (monster.getXPos() - player.getXPos())*sprite.getHeight()*zoomLevel + (Window.HEIGHT/2)-(sprite.getHeight()/2)*zoomLevel;</span>
+
+<span class="nc" id="L241">        return offsetOnScreen;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">roguelike-game</a> &gt; <a href="index.source.html" class="el_package">cn.edu.nju</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">package cn.edu.nju;
+
+import cn.edu.nju.GameLogic.GameControl;
+import cn.edu.nju.gui.KeyBoard;
+import cn.edu.nju.gui.SuspendListener;
+import cn.edu.nju.gui.Window;
+
+import java.util.concurrent.TimeUnit;
+
+<span class="nc" id="L10">public class Main {</span>
+    public static void main(String[] args) {
+        try {
+			
+<span class="fc" id="L14">			System.out.println(&quot;[Main]: Starting...&quot;);</span>
+<span class="fc" id="L15">			Window.create();</span>
+<span class="fc" id="L16">			GameControl.initGame();</span>
+<span class="fc" id="L17">			Window.setVisible();</span>
+<span class="fc" id="L18">			Window.screen.setFocusable(true);</span>
+<span class="fc" id="L19">			Window.screen.requestFocus();</span>
+<span class="fc" id="L20">			KeyBoard kb = new KeyBoard();</span>
+<span class="fc" id="L21">			Window.screen.addKeyListener(kb);</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">			while(!kb.enter_be_pressed){</span>
+				
+			}
+<span class="fc" id="L25">			TimeUnit.MILLISECONDS.sleep(2000);</span>
+<span class="fc" id="L26">			SuspendListener suspendListener = new SuspendListener();</span>
+<span class="fc" id="L27">			Window.screen.addKeyListener(suspendListener);</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">			if(kb.restoreMode)GameControl.restoreGameState();</span>
+<span class="fc" id="L29">			GameControl.startGame();</span>
+<span class="fc" id="L30">			System.out.println(&quot;[Main]: Started!&quot;);</span>
+			
+<span class="pc" id="L32">		} catch(Exception e) {</span>
+<span class="nc" id="L33">			System.err.println(&quot;\n[Main]: Uncaught exception in initialization!\n&quot;);</span>
+<span class="nc" id="L34">			e.printStackTrace();</span>
+<span class="nc" id="L35">			System.exit(-1);</span>
+		}
+<span class="fc" id="L37">	}</span>
+    }
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

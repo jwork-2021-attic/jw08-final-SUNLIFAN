@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bullet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">roguelike-game</a> &gt; <a href="index.source.html" class="el_package">cn.edu.nju.entity</a> &gt; <span class="el_source">Bullet.java</span></div><h1>Bullet.java</h1><pre class="source lang-java linenums">package cn.edu.nju.entity;
+
+import java.io.Serializable;
+
+import cn.edu.nju.scene.Map;
+import cn.edu.nju.scene.Tile;
+import cn.edu.nju.utils.Direction;
+
+public class Bullet implements Serializable{
+    public static final int speed = 1;
+    private boolean active;
+    private int attack;
+    private Direction direction;
+    private int xPos;
+    private int yPos;
+    private String shotBy;
+    private Map map;
+    
+<span class="fc" id="L19">    public Bullet(int attackVal, Direction direction,int x, int y,String shotBy, Map map){</span>
+<span class="fc" id="L20">        this.attack = attackVal;</span>
+<span class="fc" id="L21">        this.direction = direction;</span>
+<span class="fc" id="L22">        this.active = true;</span>
+<span class="fc" id="L23">        this.xPos = x;</span>
+<span class="fc" id="L24">        this.yPos = y;</span>
+<span class="fc" id="L25">        this.shotBy = shotBy;</span>
+<span class="fc" id="L26">        this.map = map;</span>
+<span class="fc" id="L27">    }</span>
+
+<span class="fc" id="L29">    public int getXPos(){return this.xPos;}</span>
+
+<span class="fc" id="L31">    public int getYPos(){return this.yPos;}</span>
+
+    public synchronized void forward(){
+<span class="pc bpc" id="L34" title="3 of 5 branches missed.">        switch(direction){</span>
+            case LEFT:
+<span class="nc" id="L36">                this.yPos-=speed;</span>
+<span class="nc" id="L37">                break;</span>
+            case RIGHT:
+<span class="nc" id="L39">                this.yPos+=speed;</span>
+<span class="nc" id="L40">                break;</span>
+            case UP:
+<span class="fc" id="L42">                this.xPos-=speed;</span>
+<span class="fc" id="L43">                break;</span>
+            case DOWN:    
+<span class="fc" id="L45">                this.xPos+=speed;</span>
+                break;
+        }
+<span class="pc bpc" id="L48" title="3 of 8 branches missed.">        if(xPos &lt;= 0 || xPos&gt;=map.getHeight() || yPos &lt;= 0 || yPos &gt;= map.getWidth()){</span>
+<span class="fc" id="L49">            this.active = false;</span>
+<span class="fc" id="L50">            return;</span>
+        }
+
+<span class="fc" id="L53">        Tile tile = map.getTile(xPos, yPos);</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if(tile.getName().equals(&quot;wall&quot;)){</span>
+<span class="nc" id="L55">            this.active = false;</span>
+<span class="nc" id="L56">            return;</span>
+        }else{
+<span class="pc bpc" id="L58" title="1 of 4 branches missed.">            if(tile!=null &amp;&amp; tile.getCreature()!=null){</span>
+<span class="fc" id="L59">                Creature c = tile.getCreature();</span>
+<span class="fc" id="L60">                System.out.println(c.getName() + &quot; was hit ! &quot;);</span>
+<span class="fc" id="L61">                System.out.println(&quot;the health of &quot;+ c.getName() + &quot; is &quot; + c.getHealth());</span>
+<span class="fc" id="L62">                boolean success = hit(c);</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">                if(success)this.active = false;</span>
+            }
+        }
+<span class="fc" id="L66">    }</span>
+
+<span class="fc" id="L68">    public boolean isActive(){return this.active;}</span>
+    
+<span class="fc" id="L70">    public void setActive(boolean active){this.active = active;}</span>
+    
+    /**
+     * hit has to take effect orderly, thus need synchronized
+     * @param c
+     */
+    public synchronized boolean hit(Creature c){
+<span class="pc bpc" id="L77" title="1 of 4 branches missed.">        if((shotBy.equals(&quot;player&quot;) &amp;&amp; c.getName().equals(&quot;player&quot;)) || </span>
+<span class="pc bpc" id="L78" title="5 of 6 branches missed.">        (shotBy.equals(&quot;monster&quot;) &amp;&amp; (c.getName().equals(&quot;bat&quot;) || c.getName().equals(&quot;rat&quot;) ||</span>
+<span class="pc bnc" id="L79" title="All 2 branches missed.">         c.getName().equals(&quot;ghost&quot;))))return false;</span>
+<span class="fc" id="L80">        c.damage(attack);</span>
+<span class="fc" id="L81">        this.active = false;</span>
+<span class="fc" id="L82">        return true;</span>
+    } 
+
+
+<span class="fc" id="L86">    public Direction getDirection(){return direction;}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

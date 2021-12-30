@@ -1,0 +1,30 @@
+@startuml classes
+class Creature
+class Player
+class Bullet
+class Monster
+class GameControl
+class PlayerControl
+class BulletAI
+class Map 
+class Tile 
+interface Message 
+class CreatureNewMsg
+class CreatureAlreadyExistsMsg
+class CreatureMoveMsg
+class CreatureDamageMsg
+class BulletNewMsg
+class MessageFactory
+class MonsterAI 
+Creature <|-- Monster  
+Creature <|-- Player 
+Message <|-- CreatureNewMsg
+Message <|-- CreatureAlreadyExistsMsg
+Message <|-- BulletNewMsg 
+Message <|-- CreatureDamageMsg
+Message <|-- CreatureMoveMsg
+PlayerControl o-- Player 
+BulletAI o-- Bullet
+Map <|-- Tile 
+MonsterAI <|-- Monster
+@enduml

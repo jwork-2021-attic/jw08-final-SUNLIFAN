@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BulletAI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">roguelike-game</a> &gt; <a href="index.source.html" class="el_package">cn.edu.nju.entity</a> &gt; <span class="el_source">BulletAI.java</span></div><h1>BulletAI.java</h1><pre class="source lang-java linenums">package cn.edu.nju.entity;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import cn.edu.nju.GameLogic.GameControl;
+
+
+public class BulletAI implements Runnable{
+    private List&lt;Bullet&gt; bullets;
+
+<span class="fc" id="L12">    public BulletAI(List&lt;Bullet&gt; bullets){</span>
+<span class="fc" id="L13">        this.bullets = bullets;</span>
+<span class="fc" id="L14">    }</span>
+
+    @Override
+    public void run() {
+<span class="nc" id="L18">        while(true){</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">            if(!GameControl.gameState)break;</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">            if(GameControl.suspend)continue;</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">            for(int i = 0; i &lt; bullets.size(); i ++){</span>
+<span class="fc" id="L22">                Bullet b = bullets.get(i);</span>
+<span class="fc" id="L23">                b.forward();</span>
+            }
+
+            try {
+<span class="fc" id="L27">                TimeUnit.MILLISECONDS.sleep(200);</span>
+<span class="pc" id="L28">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L29">                System.out.println(&quot;[BulletAI]:Exceptions in BulletAI!!!&quot;);</span>
+            }
+        }    
+<span class="nc" id="L32">    }</span>
+
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

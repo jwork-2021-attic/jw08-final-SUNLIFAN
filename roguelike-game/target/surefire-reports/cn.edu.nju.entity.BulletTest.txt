@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: cn.edu.nju.entity.BulletTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s - in cn.edu.nju.entity.BulletTest
