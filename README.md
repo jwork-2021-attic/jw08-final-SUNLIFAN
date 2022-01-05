@@ -8,7 +8,7 @@ In this Game, player needs to escape the room through the stairs, before killed 
 
 There is only one floor currently, but there will be more in the future version. 
 
-
+In network version, players need to fight with each other, and find the only key in the room, use it to open the locked door and escape before killed by monsters or other players.
 
 ### Guidance
 
@@ -24,7 +24,11 @@ D: move rightward
 
 Use 'Space' to fire a energy ball.   
 
+Use 'P' to pause in v1.1 local version
 
+Use 'K' to save progress in v1.1 local version
+
+Use 'R' to restore progress in v1.1 local version 
 
 ### Demo
 
@@ -32,9 +36,12 @@ Use 'Space' to fire a energy ball.
 
 ### Current version 
 
-v 1.0
+v 1.2 network version
 
 
 
 ### History version 
 
+v 1.0 simple local version 
+
+v 1.1 more complex local version : support progress saving
