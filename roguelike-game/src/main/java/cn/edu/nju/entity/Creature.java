@@ -3,7 +3,6 @@ package cn.edu.nju.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import cn.edu.nju.net.Client;
 import cn.edu.nju.scene.Map;
 import cn.edu.nju.scene.Tile;
 import cn.edu.nju.utils.Direction;
@@ -107,12 +106,6 @@ public class Creature implements Serializable{
             xPos = curX;
             yPos = curY;
             neighborTile.setCreature(this);
-        }else if(neighborTile != null && neighborTile.getName().equals("chest") && Client.gold >= 3){
-            //open the chest to get some strengthen
-            neighborTile.open(this);
-            Client.gold -= 3;
-        }else if(neighborTile != null && neighborTile.getName().equals("drawer")){
-            neighborTile.openDrawer();
         }
         
     }
@@ -121,7 +114,7 @@ public class Creature implements Serializable{
 
     public void fire(Direction dir){
         if(bullets.size() <= 1000){
-            bullets.add(new Bullet(strength,dir, xPos, yPos,name,map));
+            bullets.add(new Bullet(strength,dir, xPos, yPos,id+"",map));
         }
         else System.out.println("Bullet list is full !");
     }

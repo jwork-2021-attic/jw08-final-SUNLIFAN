@@ -3,11 +3,12 @@ package cn.edu.nju.scene;
 import java.io.Serializable;
 
 import cn.edu.nju.entity.Creature;
+import cn.edu.nju.entity.Player;
 import cn.edu.nju.net.Client;
 import cn.edu.nju.utils.Strengthen;
 
 public class Tile implements Serializable{
-    private String name;
+    public String name;
     private int xPos;
     private int yPos;
     private boolean isOpen;//valid when this tile is a chest
@@ -68,6 +69,17 @@ public class Tile implements Serializable{
         if(isOpen)return;
         isOpen = true;
         Client.gold += 2;
+    }
+
+    public void takeKey(Player player){
+        if(!name.equals("key"))return;
+        player.getKey = true;
+        name = "table";
+    }
+
+    public void doorOpen(){
+        if(!name.equals("locked_door"))return;
+        name = "stairs";
     }
     
 }

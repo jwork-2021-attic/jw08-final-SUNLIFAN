@@ -2,12 +2,14 @@ package cn.edu.nju.entity;
 
 import java.util.List;
 
+import cn.edu.nju.GameLogic.GameControl;
 import cn.edu.nju.net.Client;
 import cn.edu.nju.scene.Map;
 import cn.edu.nju.scene.Tile;
 
 public class Player extends Creature{
     public int id;
+    public boolean getKey;
     public Player(int x, int y, Map map, List<Bullet> bullets, int id){
         super("player",x, y, map, bullets, id);
     }
@@ -45,7 +47,33 @@ public class Player extends Creature{
             neighborTile.openDrawer();
         }else if(neighborTile != null && neighborTile.getCreature()!= null && neighborTile.getCreature().id < 0){
             this.damage(neighborTile.getCreature().strength);
+        }else if(neighborTile != null && neighborTile.getName().equals("key")){
+            neighborTile.takeKey(this);
+        }else if(neighborTile != null && neighborTile.getName().equals("locked_door")){
+            if(getKey)neighborTile.doorOpen();
+        }else if(neighborTile != null && neighborTile.getName().equals("stairs") && GameControl.getOtherPlayers().size() == 0){
+            getKey = false;
+            GameControl.playerWin = true;
+            GameControl.gameState = false;
         }
         
+    }
+
+
+    public synchronized void damage(int amount){
+        int leftDamage = amount - defence;
+        if(leftDamage <= 0){
+            defence -= amount;
+            return;
+        }else{
+            defence = 0;
+        }
+        this.health -= leftDamage;
+        if(this.health <= 0){
+            health = 0;
+            map.getTile(xPos, yPos).setCreature(null);
+            this.alive = false;
+            if(getKey)map.getTile(1, 49).name = "key";
+        }
     }
 }

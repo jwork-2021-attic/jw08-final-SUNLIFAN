@@ -30,11 +30,6 @@ public class PlayerControl implements Runnable, KeyListener{
                 GameControl.playerWin = false;
                 break;
             }
-            if(Client.kill > 0 && Client.kill == GameControl.getOtherPlayers().size()){
-                GameControl.playerWin = true;
-                GameControl.gameState = false;
-                break;
-            }
         }
     }
 

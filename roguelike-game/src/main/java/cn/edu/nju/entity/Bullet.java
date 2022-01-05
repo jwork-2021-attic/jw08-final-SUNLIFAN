@@ -2,6 +2,7 @@ package cn.edu.nju.entity;
 
 import java.io.Serializable;
 
+import cn.edu.nju.GameLogic.GameControl;
 import cn.edu.nju.net.Client;
 import cn.edu.nju.scene.Map;
 import cn.edu.nju.scene.Tile;
@@ -61,9 +62,20 @@ public class Bullet implements Serializable{
                 System.out.println(c.getName() + " was hit ! ");
                 System.out.println("the health of "+ c.getName() + " is " + c.getHealth());
                 boolean success = hit(c);
-                if(!c.isAlive() && shotBy.equals("player")){
+                if(!c.isAlive() && shotBy.equals(Client.getInstance().clientID+"")){
                     Client.gold += 2;
-                    if(c.id >= 0)Client.kill += 1;
+                    if(c.id >= 0){
+                        Client.kill += 1;
+                        Player p = (Player)c;
+                        if(p.getKey){
+                            if(Integer.parseInt(shotBy) == Client.getInstance().clientID){
+                                GameControl.getPlayer().getKey = true;
+                            }else if(Integer.parseInt(shotBy)>=0){
+                                Player player = GameControl.getOtherPlayers().get(Integer.parseInt(shotBy));
+                                player.getKey = true;
+                        }
+                    }
+                    }
                 }
                 if(success)this.active = false;
             }

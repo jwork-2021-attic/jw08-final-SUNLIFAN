@@ -20,6 +20,9 @@ public class MessageFactory {
             case 5:
                 ansMsg = new CreatureAlreadyExists(msg);
                 break;
+            case 6:
+                ansMsg = new MonsterNewMsg(msg);
+                break;
         }
         return ansMsg;
     }

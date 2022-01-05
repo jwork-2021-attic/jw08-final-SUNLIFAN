@@ -3,6 +3,8 @@ package cn.edu.nju.entity;
 import java.util.List;
 
 import cn.edu.nju.scene.Map;
+import cn.edu.nju.scene.Tile;
+import cn.edu.nju.utils.Direction;
 
 public class Monster extends Creature{
 
@@ -20,9 +22,9 @@ public class Monster extends Creature{
     public Type getType(){return this.type;}
 
     public enum Type {
-        BAT("bat", 30, 2, 0),
-        RAT("rat", 40, 2, 0),
-        GHOST("ghost", 50, 3, 1);
+        BAT("bat", 20, 2, 0),
+        RAT("rat", 25, 2, 0),
+        GHOST("ghost", 30, 3, 1);
         
         private String name;
         private int hp;
@@ -51,6 +53,38 @@ public class Monster extends Creature{
         public int getDef() {
             return def;
         }
+    }
+
+
+    public synchronized void move(){
+        Tile neighborTile = map.getNeighborTile(xPos, yPos, dir);
+        int curX = xPos;
+        int curY = yPos;
+        switch(dir){
+            case LEFT:   
+                curY--;
+                break;
+            case RIGHT:   
+                curY++;
+                break;
+            case UP:     
+                curX--;
+                break;
+            case DOWN:    
+                curX++;
+                break;
+        }
+
+        if(neighborTile!=null && neighborTile.isAvailable()){
+            Tile curTile = map.getTile(xPos, yPos);
+            curTile.setCreature(null);
+            xPos = curX;
+            yPos = curY;
+            neighborTile.setCreature(this);
+        }else if(neighborTile != null && !neighborTile.isAvailable()){
+            dir = Direction.values()[(dir.ordinal()+1)%Direction.values().length];
+        }
+        
     }
     
 }

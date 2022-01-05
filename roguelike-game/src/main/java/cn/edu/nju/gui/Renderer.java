@@ -98,8 +98,10 @@ public class Renderer {
 
     public void renderMonsters(Collection<Monster> monsters, Player player, Graphics graphics) throws FileNotFoundException{
         if(monsters == null || monsters.isEmpty())return;
-
-        for(Monster m : monsters){
+        synchronized(GameControl.monsters){
+        Iterator<Monster> iter = monsters.iterator();
+        while(iter.hasNext()){
+            Monster m = iter.next();
             if(!m.isAlive())continue;
             BufferedImage sprite = Textures.getSprite(m.getName());
             int xPos = calculateWidthOffset(sprite, m, player);
@@ -107,6 +109,7 @@ public class Renderer {
             graphics.drawImage(sprite, xPos, yPos, sprite.getWidth()*zoomLevel,
             sprite.getHeight()*zoomLevel, null);
         }
+    }
     }
 
     /**
@@ -170,10 +173,10 @@ public class Renderer {
      */
     public void renderTitleScreen(Graphics graphics) {
 		graphics.setColor(Color.WHITE);
-		graphics.drawRoundRect(50, 50, Window.WIDTH-150, Window.HEIGHT-150, 10, 10);
-		graphics.setFont(new Font("Dialog", Font.PLAIN, 40));
+		graphics.drawRoundRect(50, 50, Window.WIDTH-150, Window.HEIGHT-150, 15, 15);
+		graphics.setFont(new Font("Dialog", Font.PLAIN, 30));
 		graphics.drawString("Roguelike Game", 100, 100);
-		graphics.setFont(new Font("Dialog", Font.PLAIN, 20));
+		graphics.setFont(new Font("Dialog", Font.PLAIN, 15));
 		graphics.drawString("Greetings chosen,", 100, 150);
 		graphics.drawString("I've been waiting here for you since the beginning of this universe...", 100, 180);
 		graphics.drawString("You know the world is fading...", 100, 210);
@@ -192,7 +195,7 @@ public class Renderer {
 		graphics.setFont(new Font("Dialog", Font.PLAIN, 40));
 		graphics.drawString("Roguelike Game", 100, 100);
         if(GameControl.playerWin){
-            graphics.drawString("Marvelous! You have won the game", 100, 150);
+            graphics.drawString("Marvelous! You have escaped ...", 100, 150);
         }else{
             graphics.drawString("You died. What a pity ....", 100, 150);
         }
@@ -208,7 +211,7 @@ public class Renderer {
         graphics.setColor(Color.BLACK);
 		graphics.fillRoundRect(5, 5, 100, 150, 10, 10);
 		graphics.setColor(Color.WHITE);
-		graphics.drawRoundRect(5, 5, 100, 150, 10, 10);
+		graphics.drawRoundRect(5, 5, 100, 200, 10, 10);
 
 
         graphics.setFont(new Font("Dialog", Font.PLAIN, 20));
@@ -220,6 +223,7 @@ public class Renderer {
         graphics.drawString("GOLD: "+Client.gold, 10, 105);
         graphics.drawString("playerID: " + Client.getInstance().clientID, 10, 125);
         graphics.drawString("kill: "+Client.kill, 10, 145);
+        graphics.drawString("getKey?: "+GameControl.getPlayer().getKey, 10, 165);
     }
 
     

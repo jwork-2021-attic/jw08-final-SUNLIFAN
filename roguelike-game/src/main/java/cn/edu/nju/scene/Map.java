@@ -32,6 +32,12 @@ public class Map implements Serializable{
                     case 'd':
                         map[x][y] = new Tile("drawer", x, y, null);
                         break;
+                    case 'l':
+                        map[x][y] = new Tile("locked_door", x, y, null);
+                        break;
+                    case 'k':
+                        map[x][y] = new Tile("key", x, y, null);
+                        break;
                 }
             }
     }
